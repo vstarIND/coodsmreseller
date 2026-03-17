@@ -1,9 +1,24 @@
 // ================================
-// COIND PANEL — SCRIPT.JS
+// COIND PANEL — SCRIPT.JS (FIXED)
 // ================================
 
-// 🔗 Replace with your Apps Script URL
 const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbx-UKilDtExSHQ0x1KBCGICH-gD3QH3fv7ltXTmONXZcuZSKo9YXE9pSqHWhv9QfXhr/exec";
+
+// ================================
+// UNIVERSAL API CALL (GET BASED)
+// ================================
+async function callAPI(params) {
+  const query = new URLSearchParams(params).toString();
+  const url = `${WEB_APP_URL}?${query}`;
+
+  try {
+    const res = await fetch(url);
+    return await res.json();
+  } catch (err) {
+    console.error("API ERROR:", err);
+    return { success: false, message: "Server error" };
+  }
+}
 
 // ================================
 // INIT
@@ -36,7 +51,7 @@ function checkAuth() {
 }
 
 // ================================
-// LOGIN
+// LOGIN (FIXED)
 // ================================
 async function handleLogin(e) {
   e.preventDefault();
@@ -51,41 +66,28 @@ async function handleLogin(e) {
   const btnText = document.getElementById("loginBtnText");
   const spinner = document.getElementById("loginSpinner");
 
-  // Validation
   if (!user_id || !password) {
     showAlert(alertBox, alertMsg, "Please fill all fields");
     return;
   }
 
-  // Loading UI
   spinner.classList.remove("hidden");
   btnText.textContent = "Signing in...";
   btn.disabled = true;
 
-  try {
-    const res = await fetch(WEB_APP_URL, {
-      method: "POST",
-      body: JSON.stringify({
-        action: "login",
-        user_id,
-        password
-      })
-    });
+  const data = await callAPI({
+    action: "login",
+    user_id,
+    password
+  });
 
-    const data = await res.json();
-
-    if (data.success) {
-      localStorage.setItem("coindUser", JSON.stringify(data.user));
-      window.location.href = "dashboard.html";
-    } else {
-      showAlert(alertBox, alertMsg, data.message || "Invalid credentials");
-    }
-
-  } catch (err) {
-    showAlert(alertBox, alertMsg, "Server error. Try again.");
+  if (data.success) {
+    localStorage.setItem("coindUser", JSON.stringify(data.user));
+    window.location.href = "dashboard.html";
+  } else {
+    showAlert(alertBox, alertMsg, data.message || "Invalid credentials");
   }
 
-  // Reset UI
   spinner.classList.add("hidden");
   btnText.textContent = "Login";
   btn.disabled = false;
@@ -96,53 +98,42 @@ async function handleLogin(e) {
 // ================================
 async function loadDashboardData() {
   const user = JSON.parse(localStorage.getItem("coindUser"));
-
   if (!user) return;
 
-  // Fill UI
   document.getElementById("greetingName").textContent = user.name || "User";
   document.getElementById("user-id-display").textContent = user.user_id;
   document.getElementById("balance-display").textContent = `₹${user.balance || 0}`;
   document.getElementById("balanceDisplay").textContent = `₹${user.balance || 0}`;
   document.getElementById("total-orders-display").textContent = user.total_orders || 0;
 
-  // Load services
   loadServices();
 }
 
 // ================================
-// LOAD SERVICES (DYNAMIC)
+// LOAD SERVICES (FIXED)
 // ================================
 async function loadServices() {
   const serviceSelect = document.getElementById("service");
 
-  try {
-    const res = await fetch(WEB_APP_URL, {
-      method: "POST",
-      body: JSON.stringify({
-        action: "services"
-      })
+  const data = await callAPI({
+    action: "services"
+  });
+
+  if (data.success && Array.isArray(data.services)) {
+    serviceSelect.innerHTML = `<option value="">Select Service</option>`;
+
+    data.services.forEach(service => {
+      const option = document.createElement("option");
+      option.value = service.id;
+      option.textContent = `${service.name} — ₹${service.rate}/1000`;
+      option.dataset.rate = service.rate;
+      serviceSelect.appendChild(option);
     });
-
-    const data = await res.json();
-
-    if (data.success && Array.isArray(data.services)) {
-      data.services.forEach(service => {
-        const option = document.createElement("option");
-        option.value = service.id;
-        option.textContent = `${service.name} — ₹${service.rate}/1000`;
-        option.dataset.rate = service.rate;
-        serviceSelect.appendChild(option);
-      });
-    }
-
-  } catch (err) {
-    console.log("Service load error");
   }
 }
 
 // ================================
-// ORDER SUBMIT
+// ORDER SUBMIT (FIXED)
 // ================================
 async function handleOrderSubmit(e) {
   e.preventDefault();
@@ -162,61 +153,44 @@ async function handleOrderSubmit(e) {
   const resultMsg = document.getElementById("orderResultMsg");
   const resultIcon = document.getElementById("orderResultIcon");
 
-  // Validation
   if (!email || !service || !link || !quantity) {
     showOrderResult(resultBox, resultMsg, resultIcon, "Fill all fields", false);
     return;
   }
 
-  // Get rate
   const selectedOption = document.querySelector("#service option:checked");
   const rate = selectedOption?.dataset.rate || 0;
 
-const cost = ((Number(quantity) / 1000) * Number(rate)).toFixed(2);
-  
+  const cost = ((Number(quantity) / 1000) * Number(rate)).toFixed(2);
 
-  // Loading UI
   spinner.classList.remove("hidden");
   btnText.textContent = "Processing...";
   btn.disabled = true;
 
-  try {
-    const res = await fetch(WEB_APP_URL, {
-      method: "POST",
-      body: JSON.stringify({
-        action: "order",
-        user_id: user.user_id,
-        email,
-        service,
-        link,
-        quantity,
-        cost
-      })
-    });
+  const data = await callAPI({
+    action: "order",
+    user_id: user.user_id,
+    email,
+    service,
+    link,
+    quantity,
+    cost
+  });
 
-    const data = await res.json();
+  if (data.success) {
+    showOrderResult(resultBox, resultMsg, resultIcon, "Order placed successfully", true);
 
-    if (data.success) {
-      showOrderResult(resultBox, resultMsg, resultIcon, "Order placed successfully", true);
+    user.balance = data.new_balance;
+    user.total_orders = data.total_orders;
 
-      // Update UI balance
-      user.balance = data.new_balance;
-      user.total_orders = data.total_orders;
+    localStorage.setItem("coindUser", JSON.stringify(user));
+    loadDashboardData();
 
-      localStorage.setItem("coindUser", JSON.stringify(user));
-      loadDashboardData();
-
-      document.getElementById("order-form").reset();
-
-    } else {
-      showOrderResult(resultBox, resultMsg, resultIcon, data.message || "Order failed", false);
-    }
-
-  } catch (err) {
-    showOrderResult(resultBox, resultMsg, resultIcon, "Server error", false);
+    document.getElementById("order-form").reset();
+  } else {
+    showOrderResult(resultBox, resultMsg, resultIcon, data.message || "Order failed", false);
   }
 
-  // Reset UI
   spinner.classList.add("hidden");
   btnText.textContent = "Place Order";
   btn.disabled = false;
