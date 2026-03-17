@@ -2,7 +2,7 @@
 // COIND PANEL — SCRIPT.JS (FIXED)
 // ================================
 
-const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbx-UKilDtExSHQ0x1KBCGICH-gD3QH3fv7ltXTmONXZcuZSKo9YXE9pSqHWhv9QfXhr/exec";
+const WEB_APP_URL = "https://script.google.com/macros/s/AKfycby-ViEMEamzKsIvPS08-UyJpKdlp_BHQHH42nIWlz0X4AzmDu8NsLfZhq_2-A1P4PIs/exec";
 
 // ================================
 // UNIVERSAL API CALL (GET BASED)
