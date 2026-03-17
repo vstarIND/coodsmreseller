@@ -12,11 +12,23 @@ async function callAPI(params) {
   const url = `${WEB_APP_URL}?${query}`;
 
   try {
-    const res = await fetch(url);
-    return await res.json();
+    const res = await fetch(url, {
+      method: "GET",
+      redirect: "follow"
+    });
+
+    const text = await res.text();
+
+    try {
+      return JSON.parse(text);
+    } catch {
+      console.log("RAW RESPONSE:", text);
+      return { success: false, message: "Invalid JSON" };
+    }
+
   } catch (err) {
     console.error("API ERROR:", err);
-    return { success: false, message: "Server error" };
+    return { success: false, message: "Fetch failed" };
   }
 }
 
