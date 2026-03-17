@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>COIND — Dashboard</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="dashboard-page">
+
+  <!-- ===== TOPBAR ===== -->
+  <header class="topbar">
+    <a class="topbar-brand">
+      <div class="topbar-icon">💠</div>
+      <span>COIND</span>
+    </a>
+
+    <div class="topbar-right">
+      <div class="balance-chip">
+        <span class="bal-label">Balance</span>
+        <span id="balanceDisplay" class="bal-value">₹0</span>
+      </div>
+
+      <button id="logout-btn" class="btn-logout">
+        🚪 <span>Logout</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ===== MAIN ===== -->
+  <main class="main-content">
+
+    <!-- Header -->
+    <div class="page-header">
+      <h2>Welcome, <span id="greetingName" class="greeting-name">User</span></h2>
+      <p>User ID: <span id="user-id-display">-</span></p>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-row">
+      <div class="stat-card c1">
+        <div class="stat-icon">💰</div>
+        <div class="stat-label">Balance</div>
+        <div id="balance-display" class="stat-value">₹0</div>
+      </div>
+
+      <div class="stat-card c2">
+        <div class="stat-icon">📦</div>
+        <div class="stat-label">Total Orders</div>
+        <div id="total-orders-display" class="stat-value">0</div>
+      </div>
+    </div>
+
+    <!-- Grid -->
+    <div class="dashboard-grid">
+
+      <!-- ===== ORDER PANEL ===== -->
+      <div class="panel-card">
+
+        <div class="panel-header">
+          <div class="panel-header-icon icon-purple">🛒</div>
+          <div>
+            <div class="panel-title">New Order</div>
+            <div class="panel-subtitle">Place your SMM order</div>
+          </div>
+        </div>
+
+        <div class="panel-body">
+
+          <form id="order-form">
+
+            <!-- Email -->
+            <div class="form-group">
+              <label class="form-label">Email</label>
+              <input type="email" id="email" class="form-input no-icon" placeholder="Enter email" required />
+            </div>
+
+            <!-- Service -->
+            <div class="form-group">
+              <label class="form-label">Service</label>
+              <select id="service" class="form-input service-select no-icon" required>
+                <option value="">Select service</option>
+              </select>
+            </div>
+
+            <!-- Link -->
+            <div class="form-group">
+              <label class="form-label">Link</label>
+              <input type="text" id="link" class="form-input no-icon" placeholder="Enter link" required />
+            </div>
+
+            <!-- Quantity -->
+            <div class="form-group">
+              <label class="form-label">Quantity</label>
+              <input type="number" id="quantity" class="form-input no-icon" placeholder="Enter quantity" required />
+            </div>
+
+            <!-- Submit -->
+            <button type="submit" id="orderSubmitBtn" class="btn btn-primary">
+
+              <span id="orderSpinner" class="spinner hidden"></span>
+
+              <span id="orderBtnText">Place Order</span>
+
+            </button>
+
+          </form>
+
+          <!-- Result -->
+          <div id="orderResult" class="order-result">
+            <div id="orderResultIcon" class="result-icon">✔️</div>
+            <div id="orderResultMsg">Order placed successfully</div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ===== SIDEBAR ===== -->
+      <div class="sidebar">
+
+        <!-- Steps -->
+        <div class="panel-card">
+          <div class="panel-header">
+            <div class="panel-header-icon icon-cyan">⚡</div>
+            <div>
+              <div class="panel-title">How it works</div>
+              <div class="panel-subtitle">Quick guide</div>
+            </div>
+          </div>
+
+          <div class="panel-body">
+            <ul class="steps-list">
+              <li class="step-item">
+                <div class="step-num">1</div>
+                <div class="step-text"><strong>Select</strong> a service</div>
+              </li>
+              <li class="step-item">
+                <div class="step-num">2</div>
+                <div class="step-text"><strong>Enter</strong> link & quantity</div>
+              </li>
+              <li class="step-item">
+                <div class="step-num">3</div>
+                <div class="step-text"><strong>Submit</strong> your order</div>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Services -->
+        <div class="panel-card">
+          <div class="panel-header">
+            <div class="panel-header-icon icon-green">📊</div>
+            <div>
+              <div class="panel-title">Popular Services</div>
+              <div class="panel-subtitle">Trending</div>
+            </div>
+          </div>
+
+          <div class="panel-body">
+            <ul class="services-list">
+              <li class="service-item">
+                <div class="service-name">
+                  <span class="service-dot dot-ig"></span>
+                  Instagram Followers
+                </div>
+                <span class="service-badge">Hot</span>
+              </li>
+              <li class="service-item">
+                <div class="service-name">
+                  <span class="service-dot dot-yt"></span>
+                  YouTube Views
+                </div>
+                <span class="service-badge">Hot</span>
+              </li>
+              <li class="service-item">
+                <div class="service-name">
+                  <span class="service-dot dot-tw"></span>
+                  Twitter Likes
+                </div>
+                <span class="service-badge">Hot</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <div class="footer">
+    © 2026 COIND Panel — All rights reserved
+  </div>
+
+  <script src="script.js"></script>
+
+</body>
+</html>

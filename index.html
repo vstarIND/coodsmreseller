@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>COIND — Login</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="login-page">
+
+  <!-- Background Orbs -->
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+
+  <!-- Login Card -->
+  <div class="login-card">
+
+    <!-- Branding -->
+    <div class="brand">
+      <div class="brand-icon">💠</div>
+      <h1>COIND</h1>
+      <p>Smart Reseller Panel</p>
+    </div>
+
+    <!-- Alert -->
+    <div id="loginAlert" class="alert alert-error">
+      <span>⚠️</span>
+      <span id="loginAlertMsg">Invalid credentials</span>
+    </div>
+
+    <!-- Form -->
+    <form id="login-form">
+
+      <!-- User ID -->
+      <div class="form-group">
+        <label class="form-label">User ID</label>
+        <div class="input-wrap">
+          <span class="input-icon">👤</span>
+          <input 
+            type="text" 
+            id="user_id" 
+            class="form-input" 
+            placeholder="Enter your user ID"
+            required
+          />
+        </div>
+      </div>
+
+      <!-- Password -->
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <div class="input-wrap">
+          <span class="input-icon">🔒</span>
+          <input 
+            type="password" 
+            id="password" 
+            class="form-input" 
+            placeholder="Enter your password"
+            required
+          />
+        </div>
+      </div>
+
+      <!-- Button -->
+      <button type="submit" id="loginBtn" class="btn btn-primary">
+
+        <span id="loginSpinner" class="spinner hidden"></span>
+
+        <span id="loginBtnText">Login</span>
+
+      </button>
+
+    </form>
+
+  </div>
+
+  <!-- Script -->
+  <script src="script.js"></script>
+
+</body>
+</html>
